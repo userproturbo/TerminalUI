@@ -52,9 +52,10 @@ void main() {
   float displacement = pattern(uv);
   float displacementb = pattern(uv * 1.141477824124);
   float displacementc = pattern(uv * 1.133511522144);
-  vec4 color = vec4(displacement * 0.0152, displacementc * 0.7633, displacementb * 3.1534, 1.0);
-  color.a = min(color.r * 0.25, 1.0);
-  gl_FragColor = vec4(color.rgb * 2.0, 1.0);
+  float intensity = displacement * 1.4 + displacementb * 0.45 + displacementc * 0.35;
+  intensity = intensity / (1.0 + intensity);
+  vec3 color = vec3(0.03, 0.12, 0.03) + vec3(0.02, intensity * 1.6, 0.02);
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -100,9 +101,10 @@ void main() {
   vec2 uv = vUv;
   uv *= 4.5;
   float displacement = pattern(uv);
-  vec4 color = vec4(displacement * 1.2, 0.2, displacement * 5.0, 1.0);
-  color.a = min(color.r * 0.25, 1.0);
-  gl_FragColor = vec4(color.rgb, 1.0);
+  float intensity = displacement * 1.8;
+  intensity = intensity / (1.0 + intensity);
+  vec3 color = vec3(0.03, 0.1, 0.03) + vec3(0.02, intensity * 1.7, 0.02);
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -151,9 +153,10 @@ void main() {
   float displacement = pattern(uv);
   float displacementb = pattern(uv * 1.398811103344);
   float displacementc = pattern(uv * 1.0162420271200001);
-  vec4 color = vec4(displacement * 1.1979, displacementc * 1.4173, displacementb * 0.1388, 1.0);
-  color.a = min(color.r * 0.25, 1.0);
-  gl_FragColor = vec4(color.rgb, 1.0);
+  float intensity = displacement * 1.4 + displacementb * 0.45 + displacementc * 0.35;
+  intensity = intensity / (1.0 + intensity);
+  vec3 color = vec3(0.03, 0.12, 0.03) + vec3(0.02, intensity * 1.6, 0.02);
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -201,9 +204,10 @@ void main() {
   float displacement = pattern(uv);
   float displacementb = pattern(uv * 1.11814950169);
   float displacementc = pattern(uv * 1.111268722573);
-  vec4 color = vec4(displacement * 3.0440, displacementc * 0.8042, displacementb * 0.7098, 1.0);
-  color.a = min(color.r * 0.25, 1.0);
-  gl_FragColor = vec4(color.rgb, 1.0);
+  float intensity = displacement * 1.4 + displacementb * 0.45 + displacementc * 0.35;
+  intensity = intensity / (1.0 + intensity);
+  vec3 color = vec3(0.03, 0.12, 0.03) + vec3(0.02, intensity * 1.6, 0.02);
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -251,9 +255,10 @@ void main() {
   float displacement = pattern(uv);
   float displacementb = pattern(uv * 1.02492378238);
   float displacementc = pattern(uv * 1.096117515109);
-  vec4 color = vec4(displacement * 1.3146, displacementc * 0.7655, displacementb * 2.2111, 1.0);
-  color.a = min(color.r * 0.25, 1.0);
-  gl_FragColor = vec4(color.rgb, 1.0);
+  float intensity = displacement * 1.4 + displacementb * 0.45 + displacementc * 0.35;
+  intensity = intensity / (1.0 + intensity);
+  vec3 color = vec3(0.03, 0.12, 0.03) + vec3(0.02, intensity * 1.6, 0.02);
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -303,9 +308,10 @@ void main() {
   float displacement = pattern(uv);
   float displacementb = pattern(uv * 1.032591895413);
   float displacementc = pattern(uv * 1.36200947148);
-  vec4 color = vec4(displacement * 3.8199, displacementc * 2.6827, displacementb * 1.0351, 1.0);
-  color.a = min(color.r * 0.25, 1.0);
-  gl_FragColor = vec4(color.rgb, 1.0);
+  float intensity = displacement * 1.4 + displacementb * 0.45 + displacementc * 0.35;
+  intensity = intensity / (1.0 + intensity);
+  vec3 color = vec3(0.03, 0.12, 0.03) + vec3(0.02, intensity * 1.6, 0.02);
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -353,9 +359,10 @@ void main() {
   float displacement = pattern(uv);
   float displacementb = pattern(uv * 1.166719995036);
   float displacementc = pattern(uv * 1.088219192624);
-  vec4 color = vec4(displacement * 0.7473, displacementc * 1.8275, displacementb * 0.1177, 1.0);
-  color.a = min(color.r * 0.25, 1.0);
-  gl_FragColor = vec4(color.rgb, 1.0);
+  float intensity = displacement * 1.4 + displacementb * 0.45 + displacementc * 0.35;
+  intensity = intensity / (1.0 + intensity);
+  vec3 color = vec3(0.03, 0.12, 0.03) + vec3(0.02, intensity * 1.6, 0.02);
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
