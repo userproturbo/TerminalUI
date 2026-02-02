@@ -7,6 +7,8 @@
   --frame-glow: rgba(88, 98, 126, 0.35);
   --screen: #101118;
   --grid-gap: 28px;
+  --matrix-green-dim: #0a2f0a;
+  --matrix-green-bright: #00ff66;
 }
 
 * {
@@ -118,6 +120,244 @@ body {
   height: 100%;
 }
 
+.hero-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.scan-trigger {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  padding: 10px 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 102, 0.35);
+  background: rgba(7, 10, 8, 0.82);
+  color: var(--matrix-green-bright);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 12px rgba(0, 255, 102, 0.12),
+    0 0 14px rgba(0, 255, 102, 0.15);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    transform 0.2s ease,
+    opacity 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.scan-trigger:hover {
+  transform: translateX(-50%) scale(1.03);
+  border-color: rgba(0, 255, 102, 0.6);
+  box-shadow:
+    inset 0 0 16px rgba(0, 255, 102, 0.2),
+    0 0 18px rgba(0, 255, 102, 0.25);
+}
+
+.scan-trigger:focus-visible {
+  outline: 2px solid rgba(0, 255, 102, 0.65);
+  outline-offset: 3px;
+}
+
+.scan-status {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  color: #ff3b3b;
+  font-size: clamp(14px, 2vw, 20px);
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 0 14px rgba(255, 60, 60, 0.5);
+  transition: opacity 0.3s ease;
+}
+
+.hero.is-scanning .scan-status,
+.hero.is-active .scan-status {
+  opacity: 1;
+}
+
+.hero.is-done .scan-status {
+  opacity: 0;
+}
+
+.hero.is-scanning .scan-trigger,
+.hero.is-active .scan-trigger,
+.hero.is-done .scan-trigger {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-title {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.hero.is-done .hero-title {
+  opacity: 1;
+}
+
+.hero-title-plate {
+  transition: stroke 0.6s ease, filter 0.6s ease;
+}
+
+.hero.is-done .hero-title-plate {
+  stroke: var(--matrix-green-bright);
+  filter: drop-shadow(0 0 10px rgba(0, 255, 102, 0.35));
+}
+
+.scan-center {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: fill 0.35s ease, stroke 0.35s ease;
+}
+
+.scan-center-outer.is-lit {
+  fill: var(--matrix-green-bright);
+  stroke: var(--matrix-green-bright);
+}
+
+.scan-center-inner.is-lit {
+  fill: var(--matrix-green-bright);
+}
+
+.hero.is-scanning .scan-center-outer,
+.hero.is-scanning .scan-center-inner {
+  fill: #ff3b3b;
+  animation: scanPulse 0.45s ease-in-out infinite;
+}
+
+.hero.is-scanning .scan-center-outer {
+  stroke: #ff3b3b;
+}
+
+.frame-hero .matrix-bar,
+.frame-hero .matrix-dot {
+  transition: fill 0.35s ease;
+}
+
+.frame-hero .matrix-line {
+  transition: stroke 0.35s ease;
+}
+
+.frame-hero .matrix-bar.is-lit {
+  fill: var(--matrix-green-bright);
+}
+
+.frame-hero .matrix-dot.is-lit {
+  fill: var(--matrix-green-bright);
+}
+
+.frame-hero .matrix-line.is-active {
+  animation: matrixLineDraw 1.2s ease-out forwards;
+  stroke: var(--matrix-green-bright);
+}
+
+.frame-hero .matrix-line.is-lit {
+  stroke: var(--matrix-green-bright);
+  stroke-dashoffset: 0%;
+}
+
+.wrap.is-locked .grid {
+  opacity: 0;
+  transform: translateY(24px);
+  pointer-events: none;
+}
+
+.wrap.is-revealed .grid {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.grid {
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+
+.matrix-bar {
+  fill: var(--matrix-green-dim);
+}
+
+.matrix-line {
+  stroke: var(--matrix-green-dim);
+  stroke-dasharray: 100%;
+  stroke-dashoffset: 100%;
+}
+
+.matrix-dot {
+  fill: var(--matrix-green-dim);
+}
+
+.matrix-bar.is-active {
+  animation: matrixBarGlow 1.8s ease-in-out;
+}
+
+.matrix-line.is-active {
+  animation: matrixLineDraw 1.8s ease-out;
+}
+
+.matrix-dot.is-active {
+  animation: matrixDotGlow 1.8s ease-in-out;
+}
+
+@keyframes matrixBarGlow {
+  0% {
+    fill: var(--matrix-green-dim);
+  }
+  40% {
+    fill: var(--matrix-green-bright);
+  }
+  100% {
+    fill: var(--matrix-green-dim);
+  }
+}
+
+@keyframes matrixLineDraw {
+  from {
+    stroke-dashoffset: 100%;
+  }
+  to {
+    stroke-dashoffset: 0%;
+  }
+}
+
+@keyframes matrixDotGlow {
+  0% {
+    fill: var(--matrix-green-dim);
+  }
+  50% {
+    fill: var(--matrix-green-bright);
+  }
+  100% {
+    fill: var(--matrix-green-dim);
+  }
+}
+
+@keyframes scanPulse {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -151,5 +391,24 @@ body {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .scan-trigger,
+  .scan-status,
+  .hero-title,
+  .hero-title-plate,
+  .scan-center,
+  .frame-hero .matrix-bar,
+  .frame-hero .matrix-dot,
+  .frame-hero .matrix-line,
+  .grid {
+    transition: none;
+    animation: none;
+  }
+
+  .matrix-bar.is-active,
+  .matrix-line.is-active,
+  .matrix-dot.is-active {
+    animation: none;
   }
 }

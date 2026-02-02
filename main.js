@@ -431,3 +431,160 @@ function loop(now) {
 }
 
 requestAnimationFrame(loop);
+
+const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+const wrap = document.querySelector(".wrap");
+const hero = document.querySelector(".hero");
+const scanButton = hero?.querySelector(".scan-trigger");
+const heroLines = hero?.querySelectorAll(".hero-line") ?? [];
+const heroSideDots = hero?.querySelectorAll(".hero-dot-side") ?? [];
+const heroBottomDots = hero?.querySelectorAll(".hero-dot-bottom") ?? [];
+const heroBarsLeft = hero?.querySelectorAll(".hero-bar-left") ?? [];
+const heroBarsRight = hero?.querySelectorAll(".hero-bar-right") ?? [];
+const scanCenters = hero?.querySelectorAll(".scan-center") ?? [];
+
+const shouldGate = Boolean(
+  hero && window.matchMedia?.("(min-width: 760px)").matches
+);
+
+const lockGrid = () => {
+  wrap?.classList.add("is-locked");
+  wrap?.classList.remove("is-revealed");
+};
+
+const revealGrid = () => {
+  wrap?.classList.add("is-revealed");
+  wrap?.classList.remove("is-locked");
+};
+
+if (shouldGate) {
+  lockGrid();
+} else {
+  revealGrid();
+}
+
+let scanInProgress = false;
+
+const completeSequence = () => {
+  if (!hero) return;
+  hero.classList.remove("is-scanning");
+  hero.classList.remove("is-active");
+  hero.classList.add("is-done");
+  revealGrid();
+  scanInProgress = false;
+};
+
+const runBarsSequence = () => {
+  const leftBars = Array.from(heroBarsLeft).reverse();
+  const rightBars = Array.from(heroBarsRight).reverse();
+  const steps = Math.max(leftBars.length, rightBars.length);
+  const barDelay = prefersReducedMotion ? 0 : 120;
+
+  if (!steps) {
+    completeSequence();
+    return;
+  }
+
+  if (barDelay === 0) {
+    leftBars.forEach((bar) => bar.classList.add("is-lit"));
+    rightBars.forEach((bar) => bar.classList.add("is-lit"));
+    completeSequence();
+    return;
+  }
+
+  let index = 0;
+  const timer = setInterval(() => {
+    leftBars[index]?.classList.add("is-lit");
+    rightBars[index]?.classList.add("is-lit");
+    index++;
+
+    if (index >= steps) {
+      clearInterval(timer);
+      completeSequence();
+    }
+  }, barDelay);
+};
+
+const startScanSequence = () => {
+  if (!hero || scanInProgress || hero.classList.contains("is-done")) return;
+
+  scanInProgress = true;
+  hero.classList.add("is-scanning");
+  scanButton?.setAttribute("disabled", "true");
+
+  const scanDuration = prefersReducedMotion ? 0 : 3000;
+  const lineDuration = prefersReducedMotion ? 0 : 1200;
+  const sideDelay = prefersReducedMotion ? 0 : 220;
+
+  const startActivation = () => {
+    hero.classList.remove("is-scanning");
+    hero.classList.add("is-active");
+
+    scanCenters.forEach((node) => node.classList.add("is-lit"));
+
+    setTimeout(() => {
+      heroLines.forEach((line) => line.classList.add("is-active"));
+      heroSideDots.forEach((dot) => dot.classList.add("is-lit"));
+
+      setTimeout(() => {
+        heroLines.forEach((line) => {
+          line.classList.remove("is-active");
+          line.classList.add("is-lit");
+        });
+        heroBottomDots.forEach((dot) => dot.classList.add("is-lit"));
+        runBarsSequence();
+      }, lineDuration);
+    }, sideDelay);
+  };
+
+  if (scanDuration === 0) {
+    startActivation();
+  } else {
+    setTimeout(startActivation, scanDuration);
+  }
+};
+
+if (scanButton && shouldGate) {
+  scanButton.addEventListener("click", startScanSequence);
+} else if (hero && !shouldGate) {
+  scanCenters.forEach((node) => node.classList.add("is-lit"));
+}
+
+if (!prefersReducedMotion) {
+  const cardBars = document.querySelectorAll(".grid .matrix-bar");
+  const cardLines = document.querySelectorAll(".grid .matrix-line");
+  const cardDots = document.querySelectorAll(".grid .matrix-dot");
+
+  let cardBarIndex = 0;
+  let cardLineIndex = 0;
+  let cardDotIndex = 0;
+  let tick = 0;
+
+  const clearActive = (nodes) => {
+    nodes.forEach((node) => node.classList.remove("is-active"));
+  };
+
+  setInterval(() => {
+    clearActive(cardBars);
+    clearActive(cardLines);
+    clearActive(cardDots);
+
+    const useLineSignal = tick % 2 === 1;
+
+    if (useLineSignal && cardLines.length) {
+      cardLines[cardLineIndex % cardLines.length]?.classList.add("is-active");
+      cardLineIndex++;
+
+      if (cardDots.length) {
+        cardDots[cardDotIndex % cardDots.length]?.classList.add("is-active");
+        cardDotIndex++;
+      }
+    } else if (cardBars.length) {
+      cardBars[cardBarIndex % cardBars.length]?.classList.add("is-active");
+      cardBarIndex++;
+    }
+
+    tick++;
+  }, 200);
+}
