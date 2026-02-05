@@ -1,7 +1,7 @@
 
 const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-const wrap = document.querySelector(".wrap");
+const grid = document.querySelector(".grid");
 const hero = document.querySelector(".hero");
 const scanButton = hero?.querySelector(".scan-trigger");
 const heroLines = hero?.querySelectorAll(".hero-line") ?? [];
@@ -19,13 +19,13 @@ const shouldGate = Boolean(
 );
 
 const lockGrid = () => {
-  wrap?.classList.add("is-locked");
-  wrap?.classList.remove("is-revealed");
+  grid?.classList.add("is-locked");
+  grid?.classList.remove("is-revealed");
 };
 
 const revealGrid = () => {
-  wrap?.classList.add("is-revealed");
-  wrap?.classList.remove("is-locked");
+  grid?.classList.add("is-revealed");
+  grid?.classList.remove("is-locked");
 };
 
 if (shouldGate) {
