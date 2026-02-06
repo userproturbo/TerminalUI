@@ -211,6 +211,52 @@ body {
   pointer-events: auto;
 }
 
+.hero-auth {
+  position: absolute;
+  top: 74px;
+  left: 132px;
+  display: flex;
+  gap: 16px;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.hero.is-done .hero-auth {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero-auth-btn {
+  background: none;
+  border: 1px solid rgba(0, 255, 102, 0.45);
+  padding: 8px 14px;
+  color: var(--matrix-green-bright);
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.85;
+  backdrop-filter: blur(4px);
+  transition:
+    opacity 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.hero-auth-btn:hover,
+.hero-auth-btn:focus-visible {
+  opacity: 1;
+  border-color: var(--matrix-green-bright);
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+}
+
+.hero-auth-btn.is-primary {
+  background: rgba(0, 255, 102, 0.08);
+}
+
 .hero-nav-btn {
   background: none;
   border: none;
